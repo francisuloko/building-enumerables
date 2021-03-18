@@ -42,7 +42,7 @@ Create a new folder/directory for the project
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](https://pountzas.github.io/Project-4-HTML-CSS-Electronics-Shop-/issues).  TO CHANGE
+Feel free to check the [issues page](https://github.com/francisuloko/building-enumerables/issues)
 
 ## Show your support
 
