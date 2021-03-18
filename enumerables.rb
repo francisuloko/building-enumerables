@@ -26,16 +26,6 @@ module Enumerable
     returns
   end
 
-  def my_map
-    temp = []
-    i = 0
-    while i < length
-      temp.push(yield(self[i]))
-      i += 1
-    end
-    p temp
-  end
-
   def my_any?
     i = 0
     while i < length
@@ -45,7 +35,7 @@ module Enumerable
     end
     false
   end
-
+  
   def my_count
     i = 0
     count = 0
@@ -54,6 +44,16 @@ module Enumerable
       i += 1
     end
     count
+  end
+
+  def my_map
+    temp = []
+    i = 0
+    while i < length
+      temp.push(yield(self[i]))
+      i += 1
+    end
+    p temp
   end
 
   def my_inject
