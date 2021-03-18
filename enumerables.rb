@@ -11,6 +11,14 @@ module Enumerable
     end
   end
 
+  def my_select(array)
+    newarray = []
+    array.my_each do |i|
+      newarray.push(i) if yield(i)
+    end
+    newarray
+  end
+
   def my_map
     temp = []
     i = 0
@@ -26,17 +34,18 @@ module Enumerable
     while i < length
       result = yield(self[i])
       return true if result == true
+
       i += 1
     end
     false
   end
-
 end
 
-array = %w[asd asdd qweee]
-num = [3, 2, 1]
+array = %w[asd asdd qweee 2 3 4 5]
+num = [3, 2, 1, 5, 8, 12]
 array.my_each(array) { |item| puts item }
 array.my_each_with_index(array) { |item, _index| puts "asdasd #{item}" }
+# num.my_select(array) { |item| puts item  }
 
 array.my_map { |item| item * 2 }
 p array.my_any? { |item| item.length < 2 }
