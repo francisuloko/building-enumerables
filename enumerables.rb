@@ -31,11 +31,18 @@ module Enumerable
     while i < length
       result = yield(self[i])
       return true if result == true
+
       i += 1
     end
     false
   end
-  
+
+  def my_none?(array)
+    returns = true
+    array.my_each { |item| returns = false unless yield(item) }
+    returns
+  end
+
   def my_count
     i = 0
     count = 0
