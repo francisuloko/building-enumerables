@@ -48,13 +48,23 @@ module Enumerable
   def my_count
     i = 0
     count = 0
-    while i < length
+    while i < self.length
       if yield(self[i]) == true
         count += 1
       end
       i += 1
     end
     count
+  end
+
+  def my_inject
+    sum = self[0]
+    i = 1
+    while i < self.length
+      sum = yield(sum, self[i])
+      i += 1
+    end
+    sum
   end
 
 end
@@ -66,6 +76,7 @@ array.my_each_with_index(array) { |item, _index| puts "asdasd #{item}" }
 # num.my_select(array) { |item| puts item  }
 
 array.my_map { |item| item * 2 }
-array.my_any? { |item| item.length < 2 }
-p num.my_count { |item| item <= 7 }
+num.my_any? { |item| item < 2 }
+num.my_count { |item| item <= 7 }
+num.my_inject { |sum, item| sum + item }
 
