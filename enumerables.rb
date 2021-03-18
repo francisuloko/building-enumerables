@@ -19,6 +19,12 @@ module Enumerable
     newarray
   end
 
+  def my_all?(array)
+    returns = true
+    array.my_each { |item| returns = false unless yield(item) }
+    returns
+  end
+
   def my_map
     temp = []
     i = 0
