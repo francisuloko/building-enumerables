@@ -1,3 +1,4 @@
+# Implementing ruby enum methods
 module Enumerable
   def my_each(array)
     array.length.times do |i|
@@ -48,10 +49,8 @@ module Enumerable
   def my_count
     i = 0
     count = 0
-    while i < self.length
-      if yield(self[i]) == true
-        count += 1
-      end
+    while i < length
+      count += 1 if yield(self[i]) == true
       i += 1
     end
     count
@@ -60,17 +59,17 @@ module Enumerable
   def my_inject
     sum = self[0]
     i = 1
-    while i < self.length
+    while i < length
       sum = yield(sum, self[i])
       i += 1
     end
     sum
   end
-
 end
 
 array = %w[asd asdd qweee 2 3 4 5]
 num = [3, 2, 1, 5, 8, 12]
+
 array.my_each(array) { |item| puts item }
 array.my_each_with_index(array) { |item, _index| puts "asdasd #{item}" }
 # num.my_select(array) { |item| puts item  }
@@ -79,4 +78,3 @@ array.my_map { |item| item * 2 }
 num.my_any? { |item| item < 2 }
 num.my_count { |item| item <= 7 }
 num.my_inject { |sum, item| sum + item }
-
