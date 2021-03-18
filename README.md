@@ -23,6 +23,7 @@ Create a new folder/directory for the project
 - go to the desired folder/directory that you want to have the project in
 - git clone https://github.com/francisuloko/building-enumerables.git
 - cd building-enumerables
+- run `ruby enumerables.rb`
 
 
 👤 **Nikos Pountzas**

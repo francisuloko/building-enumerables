@@ -72,10 +72,14 @@ module Enumerable
     end
     sum
   end
+
+  def multiply_els(arr)
+    arr.my_inject { |i, j| i * j }
+  end
 end
 
 array = %w[asd asdd qweee 2 3 4 5]
-num = [3, 2, 1, 5, 8, 12]
+num = [2, 4, 5]
 
 array.my_each(array) { |item| puts item }
 array.my_each_with_index(array) { |item, _index| puts "asdasd #{item}" }
@@ -85,3 +89,4 @@ array.my_map { |item| item * 2 }
 num.my_any? { |item| item < 2 }
 num.my_count { |item| item <= 7 }
 num.my_inject { |sum, item| sum + item }
+num.multiply_els(num)
