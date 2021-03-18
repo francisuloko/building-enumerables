@@ -30,6 +30,7 @@ module Enumerable
     end
     false
   end
+
 end
 
 array = %w[asd asdd qweee]
