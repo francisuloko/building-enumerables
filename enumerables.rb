@@ -40,11 +40,23 @@ module Enumerable
     while i < length
       result = yield(self[i])
       return true if result == true
-
       i += 1
     end
     false
   end
+
+  def my_count
+    i = 0
+    count = 0
+    while i < length
+      if yield(self[i]) == true
+        count += 1
+      end
+      i += 1
+    end
+    count
+  end
+
 end
 
 array = %w[asd asdd qweee 2 3 4 5]
@@ -54,4 +66,6 @@ array.my_each_with_index(array) { |item, _index| puts "asdasd #{item}" }
 # num.my_select(array) { |item| puts item  }
 
 array.my_map { |item| item * 2 }
-p array.my_any? { |item| item.length < 2 }
+array.my_any? { |item| item.length < 2 }
+p num.my_count { |item| item <= 7 }
+
