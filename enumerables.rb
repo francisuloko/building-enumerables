@@ -20,12 +20,12 @@ module Enumerable
     self
   end
 
-  def my_select(array)
-    newarray = []
-    array.my_each do |i|
-      newarray.push(i) if yield(i)
-    end
-    newarray
+  def my_select
+    return to_enum unless block_given?
+
+    temp = []
+    to_a.my_each { |item| temp.push(item) if yield(item) }
+    temp
   end
 
   def my_all?(array)
