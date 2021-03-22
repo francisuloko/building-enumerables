@@ -12,7 +12,7 @@ module Enumerable
   def my_each_with_index
     return enum_for(:my_each_with_index) unless block_given?
 
-    length.times do |i|
+    to_a.length.times do |i|
       yield to_a[i], i
     end
     self
