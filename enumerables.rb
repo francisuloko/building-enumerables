@@ -67,12 +67,14 @@ module Enumerable
     true
   end
 
-  def my_count
-    i = 0
+  def my_count(arg = nil)
     count = 0
-    while i < length
-      count += 1 if yield(self[i]) == true
-      i += 1
+    if block_given?
+      to_a.my_each { |item| count += 1 if yield(item) }
+    elsif arg
+      to_a.my_each { |item| count += 1 if arg == item }
+    else
+      return length
     end
     count
   end
