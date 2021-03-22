@@ -72,7 +72,7 @@ module Enumerable
     elsif arg
       to_a.my_each { |item| count += 1 if arg == item }
     else
-      return length
+      return to_a.length
     end
     count
   end
