@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Implementing ruby enum methods
 module Enumerable
   def my_each(array)
