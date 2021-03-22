@@ -54,7 +54,7 @@ module Enumerable
 
   def my_none?(arg = nil)
     if block_given?
-      to_a.my_each { |item| return false if yield(item) }
+      to_a.my_each { |item| return fals if yield(item) }
     elsif arg
       to_a.my_each do |item|
         return false if item.is_a?(Numeric) || item.is_a?(Regexp)
