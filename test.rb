@@ -76,4 +76,4 @@ puts [3, 6, 10].my_inject(0) { |sum, number| sum + number } #=> 19
 
 # 10 - my_multiply_els =========================================
 puts "\n=======================\n9 - my_multiply_els\n======================="
-puts multiply_els([2, 3, 4, 5]).to_s #=> 120
+puts multiply_els([2, 3, 4, 5]) #=> 120

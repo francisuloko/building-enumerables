@@ -6,7 +6,7 @@ module Enumerable
     return enum_for(:my_each) unless block_given?
 
     length.times do |i|
-      yield self[i]
+      yield to_a[i]
     end
     self
   end
@@ -15,99 +15,97 @@ module Enumerable
     return enum_for(:my_each_with_index) unless block_given?
 
     length.times do |i|
-      yield self[i], i
+      yield to_a[i], i
     end
     self
   end
 
   def my_select
-    return enum_for(:my_select) unless block_given?
+    return to_enum unless block_given?
 
-    newarray = []
-    to_a.my_each { |i| newarray.push(i) if yield(i) }
-    newarray
+    temp = []
+    to_a.my_each { |item| temp.push(item) if yield(item) }
+    temp
   end
 
-  def my_all?(array = nil)
+  def my_all?(arg = nil)
+    if block_given?
+      to_a.my_each { |item| return false unless yield(item) }
+    elsif arg
+      to_a.my_each do |item|
+        return false unless item.is_a?(Numeric) || item.is_a?(Regexp)
+      end
+    else
+      to_a.my_each { |item| return false unless item }
+    end
+    true
+  end
+
+  def my_any?(arg = nil)
     if block_given?
       to_a.my_each { |item| return true if yield(item) }
-    elsif array.nil?
-      to_a.my_each { |item| return false if !item || item.nil? }
-    elsif array && (array.is_a? Class)
-      to_a.my_each { |item| return true if item.class }
-    elsif array && (array.is_a? Regexp)
-      to_a.my_each { |item| return false unless item.match(array) }
+    elsif arg
+      to_a.my_each do |item|
+        return true if item.is_a?(Integer) || item.is_a?(Regexp)
+      end
     else
-      to_a.my_each { |item| return false unless item != array }
+      to_a.my_each { |item| return true if item }
     end
     false
   end
 
-  def my_any?(array = nil)
+  def my_none?(arg = nil)
     if block_given?
-      to_a.my_each { |item| return true if yield(item) == true }
-    elsif array.nil?
-      to_a.my_each { |item| return true if item == true }
-    elsif array && (array.is_a? Class)
-      to_a.my_each { |item| return false unless item.class }
-    elsif array && (array.is_a? Regexp)
-      to_a.my_each { |item| return false unless item.match(array) }
+      to_a.my_each { |item| return false if yield(item) }
+    elsif arg
+      to_a.my_each do |item|
+        return false if item.is_a?(Numeric) || item.is_a?(Regexp)
+      end
     else
-      to_a.my_each { |item| return false unless item != array }
+      to_a.my_each { |item| return false if item }
     end
-    false
+    true
   end
 
-  def my_none?(array = nil)
-    if block_given?
-      to_a.my_each { |item| return true if yield(item) == false }
-    elsif array.nil?
-      to_a.my_each { |item| return false if item == true }
-    elsif array && (array.is_a? Class)
-      to_a.my_each { |item| return false unless item.class }
-    elsif array && (array.is_a? Regexp)
-      to_a.my_each { |item| return false unless item.match(array) }
-    else
-      to_a.my_each { |item| return false unless item != array }
-    end
-    false
-  end
-
-  def my_count(array = nil)
+  def my_count(arg = nil)
     count = 0
     if block_given?
-      my_each { |item| count += 1 if yield(item) }
-    elsif array.nil?
-      my_each { |item| count += 1 if item == true }
+      to_a.my_each { |item| count += 1 if yield(item) }
+    elsif arg
+      to_a.my_each { |item| count += 1 if arg == item }
     else
-      my_each { |item| count += 1 if item == array }
+      return length
     end
     count
   end
 
-  def my_map(proc = nil)
-    return enum_for(:my_each) unless block_given?
+  def my_map(my_proc = nil)
+    return enum_for(:my_map, my_proc) unless
+      block_given? || my_proc
 
     temp = []
-    i = 0
-    while i < length
-      temp.push(yield(self[i]))
-      i += 1
+    if my_proc
+      to_a.my_each { |item| temp << my_proc.call(item) }
+    else
+      to_a.my_each { |item| temp << yield(item) }
     end
     temp
   end
 
-  def my_inject
-    sum = self[0]
-    i = 1
-    while i < length
-      sum = yield(sum, self[i])
-      i += 1
+  def my_inject(sum = nil, symbol = nil)
+    if sum.is_a?(Symbol)
+      symbol = sum
+      sum = nil
+    end
+    if block_given?
+      to_a.my_each { |item| sum = sum.nil? ? item : yield(sum, item) }
+    else
+      to_a.my_each { |item| sum = sum.nil? ? item : sum.send(symbol, item) }
     end
     sum
   end
+end
 
-  def multiply_els(arr)
-    arr.my_inject { |i, j| i * j }
-  end
+def multiply_els(arr = nil)
+  arr.my_inject(:*)
 end

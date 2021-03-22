@@ -2,10 +2,13 @@
 
 # Implementing ruby enum methods
 module Enumerable
-  def my_each(array)
-    array.length.times do |i|
-      yield(array[i])
+  def my_each
+    return enum_for(:my_each) unless block_given?
+
+    length.times do |i|
+      yield to_a[i]
     end
+    self
   end
 
   def my_each_with_index(array)
