@@ -92,30 +92,20 @@ module Enumerable
     temp
   end
 
-  def my_inject
-    sum = self[0]
-    i = 1
-    while i < length
-      sum = yield(sum, self[i])
-      i += 1
+  def my_inject(sum = nil, symbol = nil)
+    if sum.is_a?(Symbol)
+      symbol = sum
+      sum = nil
+    end
+    if block_given?
+      to_a.my_each { |item| sum = sum.nil? ? item : yield(sum, item) }
+    else
+      to_a.my_each { |item| sum = sum.nil? ? item : sum.send(symbol, item) }
     end
     sum
   end
-
-  def multiply_els(arr)
-    arr.my_inject { |i, j| i * j }
-  end
 end
 
-array = %w[asd asdd qweee 2 3 4 5]
-num = [2, 4, 5]
-
-array.my_each(array) { |item| puts item }
-array.my_each_with_index(array) { |item, _index| puts "asdasd #{item}" }
-# num.my_select(array) { |item| puts item  }
-
-array.my_map { |item| item * 2 }
-num.my_any? { |item| item < 2 }
-num.my_count { |item| item <= 7 }
-num.my_inject { |sum, item| sum + item }
-num.multiply_els(num)
+def multiply_els(arr = nil)
+  arr.my_inject(:*)
+end
