@@ -3,7 +3,7 @@ module Enumerable
   def my_each
     return enum_for(:my_each) unless block_given?
 
-    length.times do |i|
+    to_a.length.times do |i|
       yield to_a[i]
     end
     self
