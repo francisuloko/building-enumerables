@@ -79,14 +79,17 @@ module Enumerable
     count
   end
 
-  def my_map
+  def my_map(my_proc = nil)
+    return enum_for(:my_map, my_proc) unless
+      block_given? || my_proc
+
     temp = []
-    i = 0
-    while i < length
-      temp.push(yield(self[i]))
-      i += 1
+    if my_proc
+      to_a.my_each { |item| temp << my_proc.call(item) }
+    else
+      to_a.my_each { |item| temp << yield(item) }
     end
-    p temp
+    temp
   end
 
   def my_inject
