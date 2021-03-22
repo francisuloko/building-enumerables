@@ -41,15 +41,17 @@ module Enumerable
     true
   end
 
-  def my_any?
-    i = 0
-    while i < length
-      result = yield(self[i])
-      return true if result == true
-
-      i += 1
+  def my_all?(arg = nil)
+    if block_given?
+      to_a.my_each { |item| return false unless yield(item) }
+    elsif arg
+      to_a.my_each do |item|
+        return false unless item.is_a?(Numeric) || item.is_a?(Regexp)
+      end
+    else
+      to_a.my_each { |item| return false unless item }
     end
-    false
+    true
   end
 
   def my_none?(array)
