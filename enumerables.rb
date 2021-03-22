@@ -28,10 +28,17 @@ module Enumerable
     temp
   end
 
-  def my_all?(array)
-    returns = true
-    array.my_each { |item| returns = false unless yield(item) }
-    returns
+  def my_all?(arg = nil)
+    if block_given?
+      to_a.my_each { |item| return false unless yield(item) }
+    elsif arg
+      to_a.my_each do |item|
+        return false unless item.is_a?(Numeric) || item.is_a?(Regexp)
+      end
+    else
+      to_a.my_each { |item| return false unless item }
+    end
+    true
   end
 
   def my_any?
