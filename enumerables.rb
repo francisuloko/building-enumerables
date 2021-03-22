@@ -11,10 +11,13 @@ module Enumerable
     self
   end
 
-  def my_each_with_index(array)
-    array.length.times do |i|
-      yield(array[i], i)
+  def my_each_with_index
+    return enum_for(:my_each_with_index) unless block_given?
+
+    length.times do |i|
+      yield to_a[i], i
     end
+    self
   end
 
   def my_select(array)
