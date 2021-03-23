@@ -60,14 +60,14 @@ module Enumerable
   def my_none?(arg = nil)
     if block_given?
       to_a.my_each { |item| return false if yield(item) }
-    elsif arg && (arg.is_a? Regexp)
-      to_a.my_each { |item| return false if arg.match(item) }
-    elsif arg && (arg.is_a? Class)
-      to_a.my_each { |item| return false if item.class.is_a? == Class }
+    elsif !arg.nil? && (arg.is_a? Regexp)
+      to_a.my_each { |item| return false if item.match(arg) }
+    elsif !arg.nil? && (arg.class.is_a? Class)
+      to_a.my_each { |item| return false if item.class }
     elsif arg.nil?
-      to_a.my_each { |item| return fale if item }
+      to_a.my_each { |item| return false if item }
     else
-      to_a.my_each { |item| return fale if item == arg }
+      to_a.my_each { |item| return false unless item == arg }
     end
     true
   end
