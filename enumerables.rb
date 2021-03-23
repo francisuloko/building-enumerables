@@ -98,7 +98,7 @@ module Enumerable
   end
 
   def my_inject(sum = nil, symbol = nil)
-    if (!sum.nil? && symbol.nil?) && (sum.class.is_a? == Symbol || sum.class.is_a? == String)
+    if (!sum.nil? && symbol.nil?) && (sum.is_a?(Symbol) || sum.is_a?(String))
       symbol = sum
       sum = nil
     end
