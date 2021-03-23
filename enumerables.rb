@@ -1,3 +1,6 @@
+# rubocop: disable Metrics/PerceivedComplexity, Metrics/AbcSize, Metrics/CyclomaticComplexity
+# frozen_string_literal: true
+
 # Implementing  ruby enum methods
 module Enumerable
   def my_each
@@ -28,28 +31,28 @@ module Enumerable
 
   def my_all?(arg = nil)
     if block_given?
-      to_a.my_each { |item| return true unless yield(item) }
-    elsif arg
-      to_a.my_each do |item|
-        return true unless item.is_a?(Numeric) || item.is_a?(Regexp)
-      end
+      to_a.my_each { |item| return true if yield(item) }
+    elsif arg && (arg.is_a? Regexp)
+      to_a.my_each { |item| return true if item.match(arg) }
+    elsif arr && (arg.class.is_a? Class)
+      to_a.my_each { |_item| return true }
     else
-      to_a.my_each { |item| return true unless item }
+      to_a.my_each { |item| return true if item }
     end
     false
   end
 
   def my_any?(arg = nil)
     if block_given?
-      to_a.my_each { |item| return false if yield(item) }
-    elsif arg
-      to_a.my_each do |item|
-        return false if item.is_a?(Integer) || item.is_a?(Regexp)
-      end
+      to_a.my_each { |item| return true if yield(item) }
+    elsif arg && (arg.is_a? Regexp)
+      to_a.my_each { |item| return true if item.match(arg) }
+    elsif arr && (arg.class.is_a? Class)
+      to_a.my_each { |_item| return true }
     else
-      to_a.my_each { |item| return false if item }
+      to_a.my_each { |item| return true if item }
     end
-    true
+    false
   end
 
   def my_none?(arg = nil)
@@ -90,19 +93,20 @@ module Enumerable
     temp
   end
 
-  def my_inject(sum = nil, symbol = nil)
-    if sum.is_a?(Symbol)
-      symbol = sum
-      sum = nil
-    end
+  def my_inject(sum = nil, symbol = nil, &block)
     if block_given?
       to_a.my_each { |item| sum = sum.nil? ? item : yield(sum, item) }
-    else
+    elsif sum.is_a?(Symbol)
+      symbol = sum
+      sum = nil
       to_a.my_each { |item| sum = sum.nil? ? item : sum.send(symbol, item) }
+    else
+      to_a.my_each(&block)
     end
     sum
   end
 end
+# rubocop: enable Metrics/PerceivedComplexity, Metrics/AbcSize, Metrics/CyclomaticComplexity
 
 def multiply_els(arr = nil)
   arr.my_inject(:*)
