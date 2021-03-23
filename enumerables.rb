@@ -45,10 +45,10 @@ module Enumerable
   def my_any?(arg = nil)
     if block_given?
       to_a.my_each { |item| return true if yield(item) }
-    elsif arg && (arg.is_a? Regexp)
-      to_a.my_each { |item| return true if arg.match(item) }
-    elsif arg && (arg.is_a? Class)
-      to_a.my_each { |item| return true if item.class.is_a? == Class }
+    elsif !arg.nil? && (arg.is_a? Regexp)
+      to_a.my_each { |item| return true if item.match(arg) }
+    elsif !arg.nil? && (arg.class.is_a? Class)
+      to_a.my_each { |item| return true if item.class }
     elsif arg.nil?
       to_a.my_each { |item| return true if item }
     else
