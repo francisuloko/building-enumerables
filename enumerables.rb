@@ -29,15 +29,17 @@ module Enumerable
 
   def my_all?(arg = nil)
     if block_given?
-      to_a.my_each { |item| return true if yield(item) }
-    elsif arg && (arg.is_a? Regexp)
-      to_a.my_each { |item| return true if item.match(arg) }
-    elsif arg && (arg.class.is_a? Class)
-      to_a.my_each { |_item| return true }
+      to_a.my_each { |item| return false unless yield(item) }
+    elsif !arg.nil? && (arg.is_a? Regexp)
+      to_a.my_each { |item| return false unless item.match(arg) }
+    elsif !arg.nil? && (arg.class.is_a? Class)
+      to_a.my_each { |item| return false unless item.class }
+    elsif arg.nil?
+      to_a.my_each { |item| return false if !item || item.nil? }
     else
-      to_a.my_each { |item| return true if item }
+      to_a.my_each { |item| return false unless item == arg }
     end
-    false
+    true
   end
 
   def my_any?(arg = nil)
