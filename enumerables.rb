@@ -32,7 +32,7 @@ module Enumerable
       to_a.my_each { |item| return true if yield(item) }
     elsif arg && (arg.is_a? Regexp)
       to_a.my_each { |item| return true if item.match(arg) }
-    elsif arr && (arg.class.is_a? Class)
+    elsif arg && (arg.class.is_a? Class)
       to_a.my_each { |_item| return true }
     else
       to_a.my_each { |item| return true if item }
@@ -44,26 +44,30 @@ module Enumerable
     if block_given?
       to_a.my_each { |item| return true if yield(item) }
     elsif arg && (arg.is_a? Regexp)
-      to_a.my_each { |item| return true if item.match(arg) }
-    elsif arr && (arg.class.is_a? Class)
-      to_a.my_each { |_item| return true }
-    else
+      to_a.my_each { |item| return true if arg.match(item) }
+    elsif arg && (arg.is_a? Class)
+      to_a.my_each { |item| return true if item.class.is_a? == Class }
+    elsif arg.nil?
       to_a.my_each { |item| return true if item }
+    else
+      to_a.my_each { |item| return true if item == arg }
     end
     false
   end
 
   def my_none?(arg = nil)
     if block_given?
-      to_a.my_each { |item| return true if yield(item) }
-    elsif arg
-      to_a.my_each do |item|
-        return true if item.is_a?(Numeric) || item.is_a?(Regexp)
-      end
+      to_a.my_each { |item| return false if yield(item) }
+    elsif arg && (arg.is_a? Regexp)
+      to_a.my_each { |item| return false if arg.match(item) }
+    elsif arg && (arg.is_a? Class)
+      to_a.my_each { |item| return false if item.class.is_a? == Class }
+    elsif arg.nil?
+      to_a.my_each { |item| return fale if item }
     else
-      to_a.my_each { |item| return true if item }
+      to_a.my_each { |item| return fale if item == arg }
     end
-    false
+    true
   end
 
   def my_count(arg = nil)
@@ -91,15 +95,15 @@ module Enumerable
     temp
   end
 
-  def my_inject(sum = nil, symbol = nil, &block)
-    if block_given?
-      to_a.my_each { |item| sum = sum.nil? ? item : yield(sum, item) }
-    elsif sum.is_a?(Symbol)
+  def my_inject(sum = nil, symbol = nil)
+    if (!sum.nil? && symbol.nil?) && (sum.class.is_a? == Symbol || sum.class.is_a? == String)
       symbol = sum
       sum = nil
+    end
+    if !block_given? && !symbol.nil?
       to_a.my_each { |item| sum = sum.nil? ? item : sum.send(symbol, item) }
     else
-      to_a.my_each(&block)
+      to_a.my_each { |item| sum = sum.nil? ? item : yield(sum, item) }
     end
     sum
   end
